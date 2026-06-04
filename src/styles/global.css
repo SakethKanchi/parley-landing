@@ -38,7 +38,15 @@
   [data-bar] { transform: scaleX(1) !important; }
   [data-draw] { stroke-dashoffset: 0 !important; }
 }
-/* Pre-JS guard against flash: only when JS will animate (no-preference), hide reveal targets initially. */
+/* Pre-hide animated elements before JS runs, ONLY when JS is active (.js-ready, set
+   synchronously in <head>) and motion is allowed. No JS → no class → content visible.
+   Reduced motion → this query never matches → content visible. Each pre-hidden element is
+   animated with an explicit end state (fromTo / set+to), never gsap.from, so the hidden
+   start does not poison the destination value. */
 @media (prefers-reduced-motion: no-preference) {
-  .js-ready [data-reveal] { will-change: transform, opacity; }
+  .js-ready [data-reveal] { opacity: 0; will-change: transform, opacity; }
+  .js-ready [data-hero-logo] .parley-bar { transform: scaleY(0); }
+  .js-ready [data-hero-logo] .parley-line { transform: scaleX(0); }
+  .js-ready [data-thread] [data-note-block] { opacity: 0; }
+  .js-ready [data-thread] [data-bar] { transform: scaleX(0); }
 }

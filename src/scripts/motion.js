@@ -19,8 +19,8 @@ function start() {
     // Hero logo settle: bars scale in from flat, line draws.
     const heroBars = gsap.utils.toArray('[data-hero-logo] .parley-bar');
     if (heroBars.length) {
-      gsap.from(heroBars, { scaleY: 0, transformOrigin: 'center', duration: 0.5, stagger: 0.06, ease: 'back.out(2)' });
-      gsap.from('[data-hero-logo] .parley-line', { scaleX: 0, transformOrigin: 'left center', duration: 0.5, delay: 0.3 });
+      gsap.fromTo(heroBars, { scaleY: 0 }, { scaleY: 1, transformOrigin: 'center', duration: 0.5, stagger: 0.06, ease: 'back.out(2)' });
+      gsap.fromTo('[data-hero-logo] .parley-line', { scaleX: 0 }, { scaleX: 1, transformOrigin: 'left center', duration: 0.5, delay: 0.3 });
     }
     initReveals();
     initPipelineDraw();

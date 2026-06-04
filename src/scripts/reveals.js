@@ -4,10 +4,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Fade/slide up any [data-reveal], staggered within a shared parent row.
 export function initReveals() {
   gsap.utils.toArray('[data-reveal]').forEach((el) => {
-    gsap.from(el, {
-      opacity: 0, y: 24, duration: 0.6, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' },
-    });
+    gsap.fromTo(el,
+      { opacity: 0, y: 24 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' },
+      },
+    );
   });
 }
 

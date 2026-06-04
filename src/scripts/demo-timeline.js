@@ -20,6 +20,7 @@ export function initDemoTimeline() {
       end: '+=2600',
       scrub: 0.6,
       pin: true,
+      invalidateOnRefresh: true,
     },
   });
 
