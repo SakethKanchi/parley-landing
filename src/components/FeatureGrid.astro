@@ -1,0 +1,13 @@
+---
+import { features } from '../data/features.js';
+import FeatureCard from './FeatureCard.astro';
+---
+<section id="features" class="mx-auto max-w-6xl px-5 py-24">
+  <div class="mx-auto mb-14 max-w-2xl text-center">
+    <h2 class="font-display text-3xl font-bold sm:text-4xl">Everything a meeting bot should be</h2>
+    <p class="mt-4 text-muted">Built for self-hosting, privacy, and the way Discord actually works.</p>
+  </div>
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    {features.map((f) => <FeatureCard title={f.title} body={f.body} icon={f.icon} />)}
+  </div>
+</section>

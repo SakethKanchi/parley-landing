@@ -1,0 +1,13 @@
+---
+interface Props { title: string; body: string; icon: string; }
+const { title, body, icon } = Astro.props;
+---
+<article data-reveal class="group rounded-2xl border border-edge bg-panel/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:bg-panel">
+  <span class="mb-4 inline-grid h-11 w-11 place-items-center rounded-xl border border-edge bg-bg text-primary transition-colors group-hover:border-primary/40">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d={icon}></path>
+    </svg>
+  </span>
+  <h3 class="font-display text-lg font-semibold text-ink">{title}</h3>
+  <p class="mt-2 text-sm leading-relaxed text-muted">{body}</p>
+</article>
