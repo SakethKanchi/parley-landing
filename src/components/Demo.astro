@@ -1,0 +1,112 @@
+---
+import { meeting } from '../data/demo.js';
+const { server, channel, title, cast, notes } = meeting;
+---
+<section id="demo" class="mx-auto max-w-6xl px-5 py-24">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <h2 class="font-display text-3xl font-bold sm:text-4xl">See it in action</h2>
+    <p class="mt-4 text-muted">A real meeting goes in. Structured notes come out — in the thread, attributed to each person.</p>
+  </div>
+
+  <div data-demo class="overflow-hidden rounded-2xl border border-edge bg-panel shadow-2xl">
+    <!-- window chrome -->
+    <div class="flex items-center gap-2 border-b border-edge px-4 py-3">
+      <span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
+      <span class="h-3 w-3 rounded-full bg-[#febc2e]"></span>
+      <span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+      <span class="ml-3 font-mono text-xs text-muted">{server} — #{channel}</span>
+    </div>
+
+    <div class="grid gap-0 md:grid-cols-[260px_1fr]">
+      <!-- voice channel rail -->
+      <aside class="border-b border-edge p-4 md:border-b-0 md:border-r">
+        <div class="mb-3 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-muted">
+          <span class="inline-block h-2 w-2 rounded-full bg-accent"></span> Voice — {title}
+        </div>
+        <ul class="space-y-2">
+          {cast.map((m) => (
+            <li data-speaker={m.handle} class="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors">
+              <span class="grid h-9 w-9 place-items-center rounded-full font-mono text-xs font-bold text-white" style={`background:${m.color}`}>{m.initials}</span>
+              <span class="flex-1">
+                <span class="block text-sm text-ink">{m.handle}</span>
+                <span class="block text-xs text-muted">{m.role}</span>
+              </span>
+              <span data-speaking-ring={m.handle} class="h-2 w-2 rounded-full bg-accent opacity-0"></span>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-4 inline-flex items-center gap-2 rounded-md bg-bg px-2 py-1 font-mono text-[11px] text-accent">
+          <span class="h-1.5 w-1.5 rounded-full bg-accent"></span> [REC]
+        </p>
+      </aside>
+
+      <!-- thread / notes area -->
+      <div class="p-5 md:p-7">
+        <div data-thread class="space-y-6">
+          <div class="flex items-center gap-2">
+            <span class="grid h-8 w-8 place-items-center rounded-full bg-primary font-mono text-[11px] font-bold text-white">P</span>
+            <div>
+              <span class="text-sm font-semibold text-ink">Parley</span>
+              <span class="ml-2 rounded bg-primary/20 px-1.5 py-0.5 font-mono text-[10px] text-primary">BOT</span>
+              <span class="ml-2 font-mono text-xs text-muted">posted meeting notes</span>
+            </div>
+          </div>
+
+          <div data-note-block>
+            <h3 class="font-mono text-xs uppercase tracking-widest text-muted">TL;DR</h3>
+            <p class="mt-2 text-ink">{notes.tldr}</p>
+          </div>
+
+          <div data-note-block>
+            <h3 class="font-mono text-xs uppercase tracking-widest text-muted">Decisions</h3>
+            <ul class="mt-2 space-y-1.5">
+              {notes.decisions.map((d) => (
+                <li class="flex items-start gap-2 text-ink"><span class="mt-1 text-accent">▸</span><span>{d}</span></li>
+              ))}
+            </ul>
+          </div>
+
+          <div data-note-block>
+            <h3 class="font-mono text-xs uppercase tracking-widest text-muted">Action items</h3>
+            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+              {notes.actionItems.map((g) => {
+                const m = cast.find((c) => c.handle === g.handle);
+                return (
+                  <div class="rounded-lg border border-edge bg-bg/50 p-3">
+                    <div class="mb-2 flex items-center gap-2">
+                      <span class="grid h-6 w-6 place-items-center rounded-full font-mono text-[10px] font-bold text-white" style={`background:${m?.color}`}>{m?.initials}</span>
+                      <span class="text-sm font-medium text-ink">{g.handle}</span>
+                    </div>
+                    <ul class="space-y-1">
+                      {g.tasks.map((t) => (
+                        <li class="flex items-start gap-2 text-sm text-muted"><span class="mt-0.5 text-primary">☐</span><span>{t}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div data-note-block>
+            <h3 class="font-mono text-xs uppercase tracking-widest text-muted">Talk-time</h3>
+            <div class="mt-3 space-y-2">
+              {notes.talkTime.map((t) => {
+                const m = cast.find((c) => c.handle === t.handle);
+                return (
+                  <div class="flex items-center gap-3">
+                    <span class="w-28 shrink-0 font-mono text-xs text-muted">{t.handle}</span>
+                    <span class="h-2.5 flex-1 overflow-hidden rounded-full bg-bg">
+                      <span data-bar style={`width:${t.pct}%;background:${m?.color}`} class="block h-full rounded-full"></span>
+                    </span>
+                    <span class="w-10 text-right font-mono text-xs text-muted">{t.pct}%</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
