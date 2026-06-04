@@ -14,8 +14,9 @@ const {
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const ogImage = `${Astro.site ?? ''}${base}/og-image.png`;
-const canonical = `${Astro.site ?? ''}${base}/`;
+const siteBase = (Astro.site?.toString() ?? '').replace(/\/$/, '');
+const ogImage = `${siteBase}${base}/og-image.png`;
+const canonical = `${siteBase}${base}/`;
 ---
 <!doctype html>
 <html lang="en">
