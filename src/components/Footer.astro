@@ -1,0 +1,17 @@
+---
+import Logo from './Logo.astro';
+const repo = 'https://github.com/SakethKanchi/parley';
+const botRepo = 'https://github.com/SakethKanchi/Discord_Meeting_Bot';
+---
+<footer class="border-t border-edge">
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 px-5 py-12 sm:flex-row sm:justify-between">
+    <a href="#main" class="flex items-center" aria-label="Parley home"><Logo size={26} withWordmark /></a>
+    <nav aria-label="Footer" class="flex flex-wrap items-center justify-center gap-6 text-sm text-muted">
+      <a href={botRepo} class="hover:text-ink">Bot repo</a>
+      <a href={`${botRepo}#readme`} class="hover:text-ink">README</a>
+      <a href={`${botRepo}/blob/master/LICENSE`} class="hover:text-ink">ISC License</a>
+      <a href={repo} class="hover:text-ink">Site source</a>
+    </nav>
+    <p class="font-mono text-xs text-muted">© 2026 Saketh Kanchi</p>
+  </div>
+</footer>
