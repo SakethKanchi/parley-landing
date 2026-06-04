@@ -1,0 +1,26 @@
+---
+const points = [
+  'Audio is transcribed on the machine running the bot — nothing is uploaded to Parley.',
+  'Only the final transcript text is sent to the summarizer you choose. With Ollama, nothing leaves your network at all.',
+  'The bot shows [REC] in its nickname whenever a recording is active, so every member can see it.',
+];
+---
+<section id="privacy" class="mx-auto max-w-6xl px-5 py-24">
+  <div class="grid items-center gap-10 rounded-2xl border border-accent/30 bg-accent/5 p-8 sm:p-12 md:grid-cols-[auto_1fr]">
+    <div class="grid h-20 w-20 place-items-center rounded-2xl border border-accent/40 bg-bg" aria-hidden="true">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+      </svg>
+    </div>
+    <div>
+      <h2 class="font-display text-3xl font-bold">Private by architecture</h2>
+      <ul class="mt-5 space-y-3">
+        {points.map((p) => (
+          <li class="flex items-start gap-3 text-ink"><span class="mt-1 text-accent">✓</span><span>{p}</span></li>
+        ))}
+      </ul>
+      <p class="mt-6 text-sm text-muted">Recording voices is subject to consent laws that vary by jurisdiction. You are responsible for obtaining consent from all participants.</p>
+    </div>
+  </div>
+</section>
