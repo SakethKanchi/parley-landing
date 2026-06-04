@@ -5,14 +5,14 @@ export function initCopy() {
       const wrap = btn.closest('[data-codeblock]');
       const pre = wrap?.querySelector('pre');
       if (!pre) return;
+      const prev = btn.textContent;
       try {
         await navigator.clipboard.writeText(pre.innerText.trim());
-        const prev = btn.textContent;
         btn.textContent = 'Copied';
-        setTimeout(() => { btn.textContent = prev; }, 1400);
       } catch {
         btn.textContent = 'Copy failed';
       }
+      setTimeout(() => { btn.textContent = prev; }, 1400);
     });
   });
 }
