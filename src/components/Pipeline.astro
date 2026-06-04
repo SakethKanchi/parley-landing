@@ -1,0 +1,37 @@
+---
+const steps = [
+  { k: '01', t: 'Capture', d: 'Per-user PCM audio captured from the voice channel — one track per speaker.' },
+  { k: '02', t: 'Transcribe locally', d: 'Each track is sent to the warm faster-whisper sidecar on your machine.' },
+  { k: '03', t: 'Summarize', d: 'The merged, speaker-labeled transcript goes to your chosen summarizer.' },
+  { k: '04', t: 'Deliver', d: 'Structured notes are posted to a Discord thread. Audio is deleted after.' },
+];
+---
+<section id="how" class="mx-auto max-w-6xl px-5 py-24">
+  <div class="mx-auto mb-14 max-w-2xl text-center">
+    <h2 class="font-display text-3xl font-bold sm:text-4xl">How it works</h2>
+    <p class="mt-4 text-muted">Two processes on your hardware. Audio never leaves the box.</p>
+  </div>
+
+  <div data-pipeline class="rounded-2xl border border-edge bg-panel/40 p-6 sm:p-10">
+    <svg viewBox="0 0 900 120" class="mx-auto hidden w-full max-w-3xl md:block" fill="none" aria-hidden="true">
+      <path data-draw d="M120 60 H250" stroke="var(--color-primary)" stroke-width="2" />
+      <path data-draw d="M400 60 H530" stroke="var(--color-primary)" stroke-width="2" />
+      <path data-draw d="M680 60 H810" stroke="var(--color-primary)" stroke-width="2" />
+      <g fill="var(--color-accent)">
+        <circle data-draw-dot cx="250" cy="60" r="3" />
+        <circle data-draw-dot cx="530" cy="60" r="3" />
+        <circle data-draw-dot cx="810" cy="60" r="3" />
+      </g>
+    </svg>
+
+    <ol class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((s) => (
+        <li data-reveal class="rounded-xl border border-edge bg-bg/50 p-5">
+          <span class="font-mono text-xs text-primary">{s.k}</span>
+          <h3 class="mt-1 font-display text-lg font-semibold text-ink">{s.t}</h3>
+          <p class="mt-2 text-sm text-muted">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
