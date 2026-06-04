@@ -2,10 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { meeting } from '../src/data/demo.js';
 
-test('cast has 4 members with handle + color', () => {
+test('cast has 4 members with handle, color, role, initials', () => {
   assert.equal(meeting.cast.length, 4);
   for (const m of meeting.cast) {
-    assert.ok(m.handle && m.color && m.role);
+    assert.ok(m.handle && m.color && m.role && m.initials);
   }
 });
 
