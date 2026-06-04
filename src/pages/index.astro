@@ -1,8 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
 ---
 <Base>
-  <main id="main" class="p-10">
-    <h1 class="font-display text-4xl text-primary">Parley scaffold OK</h1>
+  <Nav />
+  <main id="main" class="pt-24">
+    <section class="grid min-h-screen place-items-center">
+      <p class="text-muted">Sections go here.</p>
+    </section>
   </main>
 </Base>

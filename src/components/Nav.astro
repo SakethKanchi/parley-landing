@@ -1,0 +1,43 @@
+---
+import Logo from './Logo.astro';
+const repo = 'https://github.com/SakethKanchi/parley';
+const links = [
+  { href: '#demo', label: 'Demo' },
+  { href: '#features', label: 'Features' },
+  { href: '#how', label: 'How it works' },
+  { href: '#quickstart', label: 'Quickstart' },
+];
+---
+<header
+  id="nav"
+  class="fixed inset-x-0 top-0 z-40 border-b border-transparent transition-colors duration-300"
+  data-nav
+>
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+    <a href="#main" class="flex items-center" aria-label="Parley home">
+      <Logo size={28} withWordmark />
+    </a>
+    <div class="hidden items-center gap-7 md:flex">
+      {links.map((l) => (
+        <a href={l.href} class="text-sm text-muted transition-colors hover:text-ink">{l.label}</a>
+      ))}
+    </div>
+    <a
+      href={repo}
+      class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-transform hover:scale-[1.03]"
+    >★ Star on GitHub</a>
+  </nav>
+</header>
+<script>
+  const nav = document.querySelector('[data-nav]');
+  const onScroll = () => {
+    if (!nav) return;
+    if (window.scrollY > 24) {
+      nav.classList.add('border-edge', 'bg-bg/80', 'backdrop-blur');
+    } else {
+      nav.classList.remove('border-edge', 'bg-bg/80', 'backdrop-blur');
+    }
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
