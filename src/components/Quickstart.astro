@@ -1,0 +1,57 @@
+---
+const tabs = [
+  {
+    id: 'clone', label: '1 · Clone',
+    code: `git clone https://github.com/SakethKanchi/Discord_Meeting_Bot.git
+cd Discord_Meeting_Bot
+npm install`,
+  },
+  {
+    id: 'sidecar', label: '2 · STT sidecar',
+    code: `cd stt_sidecar
+python -m venv .venv
+.venv/bin/pip install -r requirements.txt
+cd ..`,
+  },
+  {
+    id: 'env', label: '3 · Configure',
+    code: `cp .env.example .env
+# then set:
+DISCORD_TOKEN=your_bot_token
+DISCORD_CLIENT_ID=your_app_id
+GEMINI_API_KEY=your_gemini_key   # free tier`,
+  },
+  {
+    id: 'run', label: '4 · Run',
+    code: `# terminal 1
+npm run sidecar
+# terminal 2
+npm start`,
+  },
+];
+---
+<section id="quickstart" class="mx-auto max-w-4xl px-5 py-24">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <h2 class="font-display text-3xl font-bold sm:text-4xl">Up and running in minutes</h2>
+    <p class="mt-4 text-muted">Two processes: the Node bot and the Python transcription sidecar.</p>
+  </div>
+
+  <div data-tabs class="overflow-hidden rounded-2xl border border-edge bg-panel/40">
+    <div role="tablist" class="flex flex-wrap gap-1 border-b border-edge p-2">
+      {tabs.map((t) => (
+        <button role="tab" data-tab={t.id} class="rounded-lg px-4 py-2 text-sm text-muted transition-colors hover:text-ink">{t.label}</button>
+      ))}
+    </div>
+    {tabs.map((t) => (
+      <div role="tabpanel" data-panel={t.id} data-codeblock class="relative hidden">
+        <button data-copy class="absolute right-4 top-4 rounded-md border border-edge bg-bg px-2.5 py-1 font-mono text-xs text-muted transition-colors hover:text-ink">Copy</button>
+        <pre class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-ink"><code>{t.code}</code></pre>
+      </div>
+    ))}
+  </div>
+
+  <p class="mt-6 text-center text-sm text-muted">
+    API keys live in <code class="font-mono text-ink">.env</code> only — never typed into Discord. Full docs in the
+    <a href="https://github.com/SakethKanchi/Discord_Meeting_Bot#readme" class="text-primary hover:underline">README</a>.
+  </p>
+</section>
