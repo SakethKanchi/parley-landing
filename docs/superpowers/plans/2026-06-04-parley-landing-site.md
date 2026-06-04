@@ -18,6 +18,29 @@
 
 ---
 
+## Implementation status — CHECKPOINT 2026-06-04
+
+**All 16 tasks implemented and committed** (subagent-driven: implementer → review → fixes per batch). Repo `~/Code/parley-site`, branch **`main`** (renamed from `master` to match `deploy.yml`). Working tree clean; `npm run build` green; Playwright smoke 3/3 passing.
+
+Batches (each implemented + reviewed + fixes applied):
+- **A** (T0–T1) scaffold + Base layout — fixed double-slash OG URL, gitignored `.vscode`.
+- **B** (T2–T5) logo/favicon/nav/hero/why — fixed heading hierarchy, nav landmark, dead var; removed Astro starter favicon.
+- **C** (T6–T7) demo data + faux-Discord window — added `initials` test assertion.
+- **D** (T8–T11) features/pipeline/privacy/quickstart — progressive-enhanced tabs (first panel visible no-JS), copy-label reset, tab keyboard nav.
+- **E** (T12–T13) GSAP motion + assembly — **eliminated FOUC** via synchronous `js-ready` pre-hide + explicit `fromTo` ends; `invalidateOnRefresh` on pinned demo.
+- **F** (T14–T16) OG image (committed `public/og-image.png`), Playwright smoke, GitHub Pages `deploy.yml` + README + LICENSE.
+
+**Notes / deviations:** Astro **6** installed (newer than the planned 5; no API impact). Tailwind scans `docs/*.md`, so the plan's class names are in the CSS bundle (minor, harmless). `package.json` has a harmless `allowScripts` entry for `sharp` (dev-only; sharp is not run in CI — the OG png is pre-committed).
+
+**Remaining — user action then push (T16 Step 6):**
+1. Create the empty GitHub repo `SakethKanchi/parley` (no README/license).
+2. `cd ~/Code/parley-site && git remote add origin git@github.com:SakethKanchi/parley.git && git push -u origin main`
+3. Repo → Settings → Pages → Source = **GitHub Actions**. Site publishes to `https://sakethkanchi.github.io/parley/`.
+
+**Not yet done:** final human visual/scroll pass in a real browser (pin pacing of the demo, hero logo settle) — recommended before announcing.
+
+---
+
 ## File Structure
 
 ```
