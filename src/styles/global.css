@@ -31,3 +31,14 @@
 
   ::selection { background: color-mix(in srgb, var(--color-primary) 40%, transparent); }
 }
+
+/* With reduced motion, ensure animated-by-JS elements are fully visible even if JS is slow/off. */
+@media (prefers-reduced-motion: reduce) {
+  [data-note-block] { opacity: 1 !important; transform: none !important; }
+  [data-bar] { transform: scaleX(1) !important; }
+  [data-draw] { stroke-dashoffset: 0 !important; }
+}
+/* Pre-JS guard against flash: only when JS will animate (no-preference), hide reveal targets initially. */
+@media (prefers-reduced-motion: no-preference) {
+  .js-ready [data-reveal] { will-change: transform, opacity; }
+}
