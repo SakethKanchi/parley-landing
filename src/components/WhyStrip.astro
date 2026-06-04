@@ -1,0 +1,38 @@
+---
+const cloud = [
+  'Per-seat monthly pricing',
+  'Your audio uploaded to their servers',
+  'Vendor decides retention & access',
+  'Yet another SaaS account',
+];
+const parley = [
+  'Free and open source (ISC)',
+  'Audio transcribed on your own machine',
+  'You own the data and the database',
+  'Runs on a Raspberry Pi or a GPU box',
+];
+---
+<section class="mx-auto max-w-6xl px-5 py-20">
+  <div class="grid gap-6 md:grid-cols-2">
+    <div class="rounded-2xl border border-edge bg-panel/40 p-8" data-reveal>
+      <h2 class="font-display text-sm uppercase tracking-widest text-muted">Cloud meeting tools</h2>
+      <ul class="mt-5 space-y-3">
+        {cloud.map((c) => (
+          <li class="flex items-start gap-3 text-muted">
+            <span class="mt-1 text-lg leading-none">✕</span><span>{c}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="rounded-2xl border border-primary/40 bg-primary/5 p-8" data-reveal>
+      <h2 class="font-display text-sm uppercase tracking-widest text-primary">Parley</h2>
+      <ul class="mt-5 space-y-3">
+        {parley.map((p) => (
+          <li class="flex items-start gap-3 text-ink">
+            <span class="mt-1 leading-none text-accent">✓</span><span>{p}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
