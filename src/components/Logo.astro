@@ -7,9 +7,7 @@ interface Props {
 }
 const { size = 32, animated = false, withWordmark = false, class: cls = '' } = Astro.props;
 const h = size;
-const w = withWordmark ? size * 4.2 : size;
 const barClass = animated ? 'parley-bar' : '';
-// Seven bars across x=4..28, varying heights; then a line from x=30 to x=44.
 const bars = [
   { x: 4, hh: 5 },
   { x: 8, hh: 9 },
