@@ -5,9 +5,9 @@ export default defineConfig({
   testMatch: '**/*.spec.mjs',
   webServer: {
     command: 'npm run preview',
-    url: 'http://localhost:4321/parley/',
+    url: 'http://localhost:4321/parley-landing/',
     reuseExistingServer: false,
     timeout: 60_000,
   },
-  use: { baseURL: 'http://localhost:4321/parley/' },
+  use: { baseURL: 'http://localhost:4321/parley-landing/' },
 });

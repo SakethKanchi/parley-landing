@@ -1,6 +1,6 @@
 # Parley — landing site
 
-Marketing site for [Parley](https://github.com/SakethKanchi/Discord_Meeting_Bot), the
+Marketing site for [Parley](https://github.com/SakethKanchi/parley), the
 self-hosted Discord meeting-notes bot. Astro + Tailwind v4 + GSAP, deployed to GitHub Pages.
 
 ## Develop
@@ -17,7 +17,7 @@ npm run make:og  # regenerate public/og-image.png
 ## Deploy
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and publishes to
-GitHub Pages. The site is served under the `/parley` base path (set in `astro.config.mjs`).
+GitHub Pages. The site is served under the `/parley-landing` base path (set in `astro.config.mjs`).
 To use a custom domain, drop `base` from the config and add a `CNAME` file in `public/`.
 
 ## License
