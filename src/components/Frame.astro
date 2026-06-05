@@ -1,0 +1,25 @@
+---
+/**
+ * Instrument bezel: a hairline-bordered panel with four corner ticks.
+ * Optional mono label sits in the top-left, status slot in the top-right.
+ */
+interface Props {
+  label?: string;
+  class?: string;
+  bg?: string;
+}
+const { label, class: cls = '', bg = 'bg-panel/60' } = Astro.props;
+---
+<div class={`relative border border-edge ${bg} ${cls}`}>
+  <span class="tick tick-tl"></span>
+  <span class="tick tick-tr"></span>
+  <span class="tick tick-bl"></span>
+  <span class="tick tick-br"></span>
+  {label && (
+    <div class="flex items-center justify-between border-b border-edge px-4 py-2.5">
+      <span class="label">{label}</span>
+      <slot name="status" />
+    </div>
+  )}
+  <slot />
+</div>

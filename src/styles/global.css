@@ -1,52 +1,327 @@
 @import "tailwindcss";
 
+/* =====================================================
+   PARLEY // SIGNAL — design tokens
+   ===================================================== */
 @theme {
-  --color-bg: #0A0B0F;
-  --color-panel: #14161D;
-  --color-panel-2: #1C1F2A;
-  --color-primary: #5865F2;
-  --color-accent: #23A559;
-  --color-ink: #E6E8EE;
-  --color-muted: #8A90A2;
-  --color-edge: #262A36;
-
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  /* Modular type scale (1.25 ratio, major third) */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.25rem;    /* 20px */
+  --text-xl: 1.5rem;     /* 24px */
+  --text-2xl: 1.875rem;  /* 30px */
+  --text-3xl: 2.25rem;   /* 36px */
+  --text-4xl: 3rem;      /* 48px */
+}
+
+/* =====================================================
+   THEME: PARLEY (default) — deep ink + blurple + phosphor
+   ===================================================== */
+:root, [data-theme="parley"] {
+  --color-bg: #08090E;
+  --color-bg-elevated: #0B0D13;
+  --color-panel: #11131B;
+  --color-panel-2: #191C28;
+  --color-primary: #5B6BFF;
+  --color-accent: #2FD673;
+  --color-ink: #E9EBF4;
+  --color-muted: #888FA6;
+  --color-edge: #232838;
+  --color-grid: rgba(120,130,180,0.05);
+  --theme-name: "Parley";
+}
+
+/* =====================================================
+   THEME: CATPPUCCIN (Mocha)
+   ===================================================== */
+[data-theme="catppuccin"] {
+  --color-bg: #181825;
+  --color-bg-elevated: #1e1e2e;
+  --color-panel: #282839;
+  --color-panel-2: #363650;
+  --color-primary: #b4befe;
+  --color-accent: #a6e3a1;
+  --color-ink: #cdd6f4;
+  --color-muted: #9399b2;
+  --color-edge: #45475a;
+  --color-grid: rgba(180,190,254,0.05);
+  --theme-name: "Catppuccin";
+}
+
+/* =====================================================
+   THEME: ROSE PINE (Moon)
+   ===================================================== */
+[data-theme="rose-pine"] {
+  --color-bg: #1c1a2e;
+  --color-bg-elevated: #232136;
+  --color-panel: #2f2b45;
+  --color-panel-2: #403d5c;
+  --color-primary: #c4a7e7;
+  --color-accent: #9ccfd8;
+  --color-ink: #e0def4;
+  --color-muted: #908caa;
+  --color-edge: #44415a;
+  --color-grid: rgba(196,167,231,0.05);
+  --theme-name: "Rose Pine";
+}
+
+/* =====================================================
+   THEME: KANAGAWA
+   ===================================================== */
+[data-theme="kanagawa"] {
+  --color-bg: #16161d;
+  --color-bg-elevated: #1f1f28;
+  --color-panel: #2a2a37;
+  --color-panel-2: #363646;
+  --color-primary: #7e9cd8;
+  --color-accent: #98bb6c;
+  --color-ink: #dcd7ba;
+  --color-muted: #918f87;
+  --color-edge: #45475a;
+  --color-grid: rgba(126,156,216,0.05);
+  --theme-name: "Kanagawa";
+}
+
+/* =====================================================
+   THEME: TOKYO NIGHT
+   ===================================================== */
+[data-theme="tokyo-night"] {
+  --color-bg: #16161e;
+  --color-bg-elevated: #1a1b26;
+  --color-panel: #24283b;
+  --color-panel-2: #2f344d;
+  --color-primary: #7aa2f7;
+  --color-accent: #9ece6a;
+  --color-ink: #c0caf5;
+  --color-muted: #787c99;
+  --color-edge: #3b4261;
+  --color-grid: rgba(122,162,247,0.05);
+  --theme-name: "Tokyo Night";
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 88px;
     background-color: var(--color-bg);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
+    font-optical-sizing: auto;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
   }
 
-  body { margin: 0; min-height: 100vh; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    line-height: 1.65;
+    position: relative;
+  }
 
-  ::selection { background: color-mix(in srgb, var(--color-primary) 40%, transparent); }
+  /* Instrument grid + top phosphor vignette, fixed behind everything. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(120% 80% at 50% -10%, #000 35%, transparent 78%);
+    mask-image: radial-gradient(120% 80% at 50% -10%, #000 35%, transparent 78%);
+    pointer-events: none;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(60% 40% at 50% -8%, color-mix(in srgb, var(--color-primary) 16%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .font-display {
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+  }
+
+  /* Display headings are not interactive — don't let them read as clickable. */
+  h1.font-display, h2.font-display, h3.font-display {
+    user-select: none;
+    cursor: default;
+  }
+
+  p {
+    max-width: 68ch;
+    text-wrap: pretty;
+  }
+
+  .font-mono {
+    letter-spacing: 0;
+  }
+
+  .uppercase {
+    letter-spacing: 0.14em;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-primary) 45%, transparent);
+    color: var(--color-ink);
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
-/* With reduced motion, ensure animated-by-JS elements are fully visible even if JS is slow/off. */
+/* =====================================================
+   Instrument utilities
+   ===================================================== */
+@layer components {
+  /* Hairline bezel + corner ticks. Add `.bezel` to a position:relative box. */
+  .bezel {
+    position: relative;
+    border: 1px solid var(--color-edge);
+  }
+  .bezel::before,
+  .bezel::after {
+    content: "";
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  /* top-left + top-right via one pseudo (gradient brackets) */
+  .bezel::before {
+    top: -1px; left: -1px;
+    border-top: 1.5px solid var(--color-primary);
+    border-left: 1.5px solid var(--color-primary);
+  }
+  .bezel::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 1.5px solid var(--color-primary);
+    border-right: 1.5px solid var(--color-primary);
+  }
+  /* Full 4-corner variant: wrap children .tick spans (see Frame.astro) */
+  .tick {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    pointer-events: none;
+    z-index: 2;
+    border-color: var(--color-primary);
+  }
+  .tick-tl { top: -1px; left: -1px; border-top: 1.5px solid; border-left: 1.5px solid; }
+  .tick-tr { top: -1px; right: -1px; border-top: 1.5px solid; border-right: 1.5px solid; }
+  .tick-bl { bottom: -1px; left: -1px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+  .tick-br { bottom: -1px; right: -1px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+
+  /* Mono machine label. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Quickstart tabs: signal which step is active + that they're clickable. */
+  [data-tabs] [role="tab"] {
+    cursor: pointer;
+    position: relative;
+    border-bottom: 2px solid transparent;
+  }
+  [data-tabs] [role="tab"]:hover {
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-panel) 55%, transparent);
+  }
+  [data-tabs] [role="tab"][aria-selected="true"] {
+    color: var(--color-ink);
+    background: var(--color-panel);
+    border-bottom-color: var(--color-primary);
+  }
+  [data-tabs] [role="tab"]:focus-visible {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+    color: var(--color-ink);
+  }
+
+  /* Live phosphor dot. */
+  .live-dot {
+    position: relative;
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 9999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 70%, transparent);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .live-dot { animation: live-pulse 2s ease-out infinite; }
+  }
+  @keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 60%, transparent); }
+    70%  { box-shadow: 0 0 0 7px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+}
+
+/* Reduced-motion: show animated-by-JS elements in their final state.
+   visibility:visible guards against gsap autoAlpha racing the matchMedia gate. */
 @media (prefers-reduced-motion: reduce) {
-  [data-note-block] { opacity: 1 !important; transform: none !important; }
-  [data-bar] { transform: scaleX(1) !important; }
-  [data-draw] { stroke-dashoffset: 0 !important; }
+  [data-reveal],
+  [data-note-block],
+  [data-beat],
+  [data-rec-badge],
+  [data-meeting-ended],
+  [data-hero-stagger],
+  [data-hero-visual] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+  [data-bar] { transform: scaleX(1) !important; visibility: visible !important; }
+  [data-stage-transcript], [data-stage-notes] { opacity: 1 !important; visibility: visible !important; }
 }
-/* Pre-hide animated elements before JS runs, ONLY when JS is active (.js-ready, set
-   synchronously in <head>) and motion is allowed. No JS → no class → content visible.
-   Reduced motion → this query never matches → content visible. Each pre-hidden element is
-   animated with an explicit end state (fromTo / set+to), never gsap.from, so the hidden
-   start does not poison the destination value. */
+
+/* Pre-hide animated elements before JS runs (full-motion only). */
 @media (prefers-reduced-motion: no-preference) {
   .js-ready [data-reveal] { opacity: 0; will-change: transform, opacity; }
-  .js-ready [data-hero-logo] .parley-bar { transform: scaleY(0); }
-  .js-ready [data-hero-logo] .parley-line { transform: scaleX(0); }
-  .js-ready [data-thread] [data-note-block] { opacity: 0; }
-  .js-ready [data-thread] [data-bar] { transform: scaleX(0); }
+  .js-ready [data-hero-stagger] { opacity: 0; }
+  .js-ready [data-hero-visual] { opacity: 0; }
+  .js-ready [data-stage-notes] [data-note-block] { opacity: 0; }
+  .js-ready [data-stage-notes] [data-bar] { transform: scaleX(0); }
+  .js-ready [data-beat] { opacity: 0; }
+  .js-ready [data-rec-badge] { opacity: 0; }
+  .js-ready [data-meeting-ended] { opacity: 0; }
+}
+
+/* Print styles */
+@media print {
+  html, body { background: #fff !important; color: #000 !important; scroll-behavior: auto !important; }
+  body::before, body::after { display: none !important; }
+  a { color: #000 !important; text-decoration: underline !important; }
+  header, footer, [data-demo], canvas, .live-dot { display: none !important; }
+  [data-reveal], [data-beat], [data-note-block] { opacity: 1 !important; transform: none !important; }
+  main { padding-top: 0 !important; }
 }

@@ -12,24 +12,32 @@ const parley = [
   'Runs on a Raspberry Pi or a GPU box',
 ];
 ---
-<section class="mx-auto max-w-6xl px-5 py-20">
-  <div class="grid gap-6 md:grid-cols-2">
-    <div class="rounded-2xl border border-edge bg-panel/40 p-8" data-reveal>
-      <p class="font-display text-sm uppercase tracking-widest text-muted">Cloud meeting tools</p>
-      <ul class="mt-5 space-y-3">
+<section class="relative mx-auto max-w-6xl px-5 py-20">
+  <div class="relative grid gap-px overflow-hidden border border-edge bg-edge md:grid-cols-2">
+    <div class="bg-panel/40 p-8" data-reveal>
+      <p class="label flex items-center gap-2">
+        <span class="text-muted">✕</span> Cloud meeting tools
+      </p>
+      <ul class="mt-6 space-y-3.5">
         {cloud.map((c) => (
           <li class="flex items-start gap-3 text-muted">
-            <span class="mt-1 text-lg leading-none">✕</span><span>{c}</span>
+            <span class="mt-1 font-mono text-xs text-muted/60">✕</span>
+            <span>{c}</span>
           </li>
         ))}
       </ul>
     </div>
-    <div class="rounded-2xl border border-primary/40 bg-primary/5 p-8" data-reveal>
-      <p class="font-display text-sm uppercase tracking-widest text-primary">Parley</p>
-      <ul class="mt-5 space-y-3">
+    <div class="relative bg-primary/[0.05] p-8" data-reveal>
+      <span class="tick tick-tr"></span>
+      <span class="tick tick-br"></span>
+      <p class="label flex items-center gap-2 text-primary">
+        <span>◆</span> Parley
+      </p>
+      <ul class="mt-6 space-y-3.5">
         {parley.map((p) => (
           <li class="flex items-start gap-3 text-ink">
-            <span class="mt-1 leading-none text-accent">✓</span><span>{p}</span>
+            <span class="mt-1 font-mono text-xs text-accent">✓</span>
+            <span>{p}</span>
           </li>
         ))}
       </ul>

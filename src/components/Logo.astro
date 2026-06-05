@@ -18,11 +18,11 @@ const bars = [
   { x: 28, hh: 6 },
 ];
 ---
-<span class={`inline-flex items-center gap-2 ${cls}`}>
+  <span class={`inline-flex items-center gap-2 ${cls}`}>
   <svg
     width={h} height={h} viewBox="0 0 48 48" fill="none"
     role="img" aria-label="Parley logo"
-    class="parley-logo overflow-visible"
+    class="parley-logo"
   >
     <g class="parley-bars" stroke="var(--color-primary)" stroke-width="3" stroke-linecap="round">
       {bars.map((b) => (
@@ -31,11 +31,11 @@ const bars = [
     </g>
     <line
       class="parley-line"
-      x1="30" y1="24" x2="44" y2="24"
+      x1="32" y1="24" x2="44" y2="24"
       stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round"
     />
   </svg>
   {withWordmark && (
-    <span class="font-display text-xl font-bold tracking-tight text-ink">Parley</span>
+    <span class="font-display text-xl font-bold text-ink">Parley</span>
   )}
 </span>

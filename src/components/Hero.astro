@@ -1,38 +1,76 @@
 ---
-import Logo from './Logo.astro';
+import Frame from './Frame.astro';
 const repo = 'https://github.com/SakethKanchi/parley';
 ---
 <section class="relative overflow-hidden">
-  <!-- ambient gradient glow -->
-  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-    <div class="absolute left-1/2 top-[-10%] h-[420px] w-[820px] -translate-x-1/2 rounded-full opacity-30 blur-[120px]"
-         style="background: radial-gradient(closest-side, var(--color-primary), transparent);"></div>
-  </div>
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-32 sm:pt-36 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:pb-28">
+    <!-- Left: editorial column -->
+    <div class="relative">
+      <div data-hero-stagger class="mb-6 inline-flex items-center gap-2.5 border border-edge bg-panel/60 px-3 py-1.5">
+        <span class="live-dot"></span>
+        <span class="label">Self-hosted · No audio leaves your machine</span>
+      </div>
 
-  <div class="mx-auto flex max-w-4xl flex-col items-center px-5 pb-24 pt-36 text-center">
-    <span class="mb-6 inline-flex items-center gap-2 rounded-full border border-edge bg-panel px-3 py-1 text-xs text-muted">
-      <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-accent"></span>
-      Free · Self-hosted · No audio ever leaves your machine
-    </span>
+      <h1 data-hero-stagger class="font-display text-[clamp(2.6rem,6.2vw,4.6rem)] font-extrabold leading-[1.02]">
+        Your Discord<br />
+        meetings, <span class="text-primary">transcribed</span><br />
+        and <span class="text-accent">summarized</span>.
+      </h1>
 
-    <div data-hero-logo class="mb-8">
-      <Logo size={88} animated />
+      <p data-hero-stagger class="mt-7 max-w-xl text-lg leading-relaxed text-muted">
+        Parley joins your voice channel, transcribes every speaker on your own
+        machine, and drops structured AI meeting notes — decisions, action items,
+        talk-time — straight into a Discord thread.
+      </p>
+
+      <div data-hero-stagger class="mt-9 flex flex-wrap items-center gap-3">
+        <a href="#quickstart" class="group inline-flex items-center gap-2 border border-primary bg-primary px-6 py-3 font-mono text-sm font-medium uppercase tracking-wider text-white transition-all hover:bg-transparent hover:text-primary">
+          Quickstart
+          <span class="transition-transform group-hover:translate-x-1">→</span>
+        </a>
+        <a href={repo} class="inline-flex items-center gap-2 border border-edge bg-transparent px-6 py-3 font-mono text-sm uppercase tracking-wider text-ink transition-colors hover:border-muted">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.6 5.6.6 12c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.3 5 18.3 5.3 18.3 5.3c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.2 5.7.4.3.8 1 .8 2.1v3.1c0 .3.2.6.8.5 4.5-1.5 7.8-5.8 7.8-10.8C23.4 5.6 18.3.5 12 .5z"/></svg>
+          View source
+        </a>
+      </div>
+
+      <!-- mono stat ticker -->
+      <div data-hero-stagger class="mt-10 flex flex-wrap gap-x-8 gap-y-2 border-t border-edge pt-5">
+        <span class="label">ISC · Free</span>
+        <span class="label">faster-whisper</span>
+        <span class="label">Gemini · Ollama · OpenAI</span>
+        <span class="label">SQLite FTS5</span>
+      </div>
     </div>
 
-    <h1 class="font-display text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
-      Your Discord meetings,<br />
-      <span class="text-primary">transcribed</span> and <span class="text-accent">summarized</span>.
-    </h1>
+    <!-- Right: live capture instrument -->
+    <div data-hero-visual class="relative">
+      <Frame label="LIVE // VOICE CAPTURE" class="shadow-2xl shadow-black/40">
+        <span slot="status" class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-accent">
+          <span class="live-dot"></span> Rec
+        </span>
 
-    <p class="mt-6 max-w-2xl text-lg text-muted">
-      Parley joins your voice channel, transcribes every speaker on your own machine, and
-      drops structured AI meeting notes — decisions, action items, talk-time — straight
-      into a Discord thread.
-    </p>
+        <!-- oscilloscope -->
+        <div class="relative h-32 border-b border-edge bg-bg/40">
+          <canvas data-hero-scope class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+          <div class="pointer-events-none absolute inset-0"
+               style="background-image: linear-gradient(var(--color-grid) 1px, transparent 1px), linear-gradient(90deg, var(--color-grid) 1px, transparent 1px); background-size: 28px 28px;"></div>
+        </div>
 
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a href="#quickstart" class="rounded-xl bg-primary px-6 py-3 font-medium text-white transition-transform hover:scale-[1.03]">Quickstart →</a>
-      <a href={repo} class="rounded-xl border border-edge bg-panel px-6 py-3 font-medium text-ink transition-colors hover:border-muted">★ View on GitHub</a>
+        <!-- resolved line -->
+        <div class="flex items-start gap-3 px-4 py-4">
+          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full font-mono text-[10px] font-bold text-white" style="background:#5865F2">PP</span>
+          <div class="min-w-0">
+            <span class="font-mono text-xs font-semibold text-ink">PixelPaladin</span>
+            <p class="mt-0.5 text-sm leading-snug text-muted">Build is green on main. Frame pacing fix is in.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between border-t border-edge px-4 py-2.5">
+          <span class="label">whisper · local · per-speaker</span>
+          <span class="label text-accent">→ thread</span>
+        </div>
+      </Frame>
     </div>
   </div>
 </section>

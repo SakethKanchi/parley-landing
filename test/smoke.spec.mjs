@@ -20,7 +20,7 @@ test.describe('reduced motion', () => {
   test.use({ colorScheme: 'dark', reducedMotion: 'reduce' });
   test('notes thread is fully visible immediately', async ({ page }) => {
     await page.goto('/parley/');
-    const blocks = page.locator('[data-thread] [data-note-block]');
+    const blocks = page.locator('[data-stage-notes] [data-note-block]');
     const n = await blocks.count();
     for (let i = 0; i < n; i++) {
       await expect(blocks.nth(i)).toBeVisible();

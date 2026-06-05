@@ -1,13 +1,22 @@
 ---
-interface Props { title: string; body: string; icon: string; }
-const { title, body, icon } = Astro.props;
+interface Props { title: string; body: string; icon: string; index?: number; }
+const { title, body, icon, index = 0 } = Astro.props;
+const n = String(index + 1).padStart(2, '0');
 ---
-<article data-reveal class="group rounded-2xl border border-edge bg-panel/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:bg-panel">
-  <span class="mb-4 inline-grid h-11 w-11 place-items-center rounded-xl border border-edge bg-bg text-primary transition-colors group-hover:border-primary/40">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d={icon}></path>
-    </svg>
-  </span>
-  <h3 class="font-display text-lg font-semibold text-ink">{title}</h3>
+<article data-reveal class="group relative flex flex-col overflow-hidden border border-edge bg-panel/40 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/60 hover:bg-panel hover:shadow-[0_16px_40px_-12px] hover:shadow-primary/25">
+  <!-- top accent bar wipes in on hover -->
+  <span class="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100"></span>
+  <span class="tick tick-tl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+  <span class="tick tick-br opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+
+  <div class="mb-5 flex items-center justify-between">
+    <span class="inline-grid h-11 w-11 place-items-center border border-edge bg-bg text-primary transition-all duration-300 group-hover:border-primary/60 group-hover:bg-primary/10 group-hover:text-ink">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d={icon}></path>
+      </svg>
+    </span>
+    <span class="font-mono text-xs text-muted/60 transition-colors group-hover:text-primary">{n}</span>
+  </div>
+  <h3 class="font-display text-lg font-bold text-ink">{title}</h3>
   <p class="mt-2 text-sm leading-relaxed text-muted">{body}</p>
 </article>

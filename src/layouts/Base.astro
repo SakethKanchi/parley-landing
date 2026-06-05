@@ -1,10 +1,11 @@
 ---
 import '../styles/global.css';
-import '@fontsource/space-grotesk/400.css';
-import '@fontsource/space-grotesk/600.css';
-import '@fontsource/space-grotesk/700.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
+import '@fontsource/bricolage-grotesque/500.css';
+import '@fontsource/bricolage-grotesque/700.css';
+import '@fontsource/bricolage-grotesque/800.css';
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/manrope/600.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 
@@ -22,13 +23,20 @@ const canonical = `${siteBase}${base}/`;
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <script is:inline>document.documentElement.classList.add('js-ready');</script>
+    <script is:inline>
+      document.documentElement.classList.add('js-ready');
+      const savedTheme = localStorage.getItem('parley-theme');
+      const themes = ['parley','catppuccin','rose-pine','kanagawa','tokyo-night'];
+      if (savedTheme && themes.includes(savedTheme)) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
-    <meta name="theme-color" content="#0A0B0F" />
+    <meta name="theme-color" content="#08090E" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -39,6 +47,28 @@ const canonical = `${siteBase}${base}/`;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta property="og:image:alt" content="Parley — self-hosted Discord meeting notes bot" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Parley",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "url": canonical,
+      "license": "https://github.com/SakethKanchi/Discord_Meeting_Bot/blob/master/LICENSE",
+      "sourceOrganization": {
+        "@type": "Organization",
+        "name": "Saketh Kanchi",
+        "url": "https://github.com/SakethKanchi"
+      }
+    })} />
   </head>
   <body class="bg-bg text-ink antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-white">Skip to content</a>

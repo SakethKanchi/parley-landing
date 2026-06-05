@@ -1,35 +1,56 @@
 ---
 const steps = [
-  { k: '01', t: 'Capture', d: 'Per-user PCM audio captured from the voice channel — one track per speaker.' },
-  { k: '02', t: 'Transcribe locally', d: 'Each track is sent to the warm faster-whisper sidecar on your machine.' },
-  { k: '03', t: 'Summarize', d: 'The merged, speaker-labeled transcript goes to your chosen summarizer.' },
-  { k: '04', t: 'Deliver', d: 'Structured notes are posted to a Discord thread. Audio is deleted after.' },
+  { k: '01', t: 'Capture', d: 'Per-user PCM audio is captured from the voice channel — one isolated track per speaker.' },
+  { k: '02', t: 'Transcribe', d: 'Each track is fed to the warm faster-whisper sidecar running locally on your machine.' },
+  { k: '03', t: 'Summarize', d: 'The merged, speaker-labeled transcript goes to your chosen LLM — Gemini, Ollama, or OpenAI-compatible.' },
+  { k: '04', t: 'Deliver', d: 'Structured notes are posted to a Discord thread. Audio is deleted after transcription.' },
 ];
 ---
-<section id="how" class="mx-auto max-w-6xl px-5 py-24">
-  <div class="mx-auto mb-14 max-w-2xl text-center">
-    <h2 class="font-display text-3xl font-bold sm:text-4xl">How it works</h2>
+<section id="how" class="relative mx-auto max-w-6xl px-5 py-24 sm:py-28">
+  <div class="mb-16 max-w-2xl" data-reveal>
+    <span class="label text-primary">// 03 — Pipeline</span>
+    <h2 class="mt-3 font-display text-[clamp(2rem,4.4vw,3rem)] font-extrabold leading-tight">How it works</h2>
     <p class="mt-4 text-muted">Two processes on your hardware. Audio never leaves the box.</p>
   </div>
 
-  <div data-pipeline class="rounded-2xl border border-edge bg-panel/40 p-6 sm:p-10">
-    <svg viewBox="0 0 900 120" class="mx-auto hidden w-full max-w-3xl md:block" fill="none" aria-hidden="true">
-      <path data-draw d="M120 60 H250" stroke="var(--color-primary)" stroke-width="2" />
-      <path data-draw d="M400 60 H530" stroke="var(--color-primary)" stroke-width="2" />
-      <path data-draw d="M680 60 H810" stroke="var(--color-primary)" stroke-width="2" />
-      <g fill="var(--color-accent)">
-        <circle data-draw-dot cx="250" cy="60" r="3" />
-        <circle data-draw-dot cx="530" cy="60" r="3" />
-        <circle data-draw-dot cx="810" cy="60" r="3" />
-      </g>
-    </svg>
+  <!-- Desktop: horizontal rail behind solid nodes -->
+  <div class="relative hidden md:block" data-pipeline>
+    <!-- baseline rail (sits behind nodes) -->
+    <div class="absolute left-0 right-0 top-7 z-0 h-px bg-edge" aria-hidden="true"></div>
+    <div data-rail class="absolute left-0 top-7 z-0 h-px bg-primary" style="width:0" aria-hidden="true"></div>
 
-    <ol class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <ol class="relative grid grid-cols-4 gap-6">
+      {steps.map((s, i) => (
+        <li data-reveal data-pipeline-step={i} class="group relative">
+          <div class="relative z-10 mb-6 inline-grid h-14 w-14 place-items-center border border-edge bg-panel font-mono text-lg font-bold text-primary transition-colors duration-300 group-hover:border-primary">
+            {s.k}
+            <span class="tick tick-tl"></span>
+            <span class="tick tick-br"></span>
+          </div>
+          <h3 class="font-display text-lg font-bold text-ink">{s.t}</h3>
+          <p class="mt-2 max-w-[230px] text-sm leading-relaxed text-muted">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <!-- Mobile: vertical timeline -->
+  <div class="relative md:hidden" data-pipeline-mobile>
+    <div class="absolute left-[1.625rem] top-2 bottom-2 w-px bg-edge" aria-hidden="true">
+      <div data-draw-vertical class="h-0 w-full bg-primary transition-all duration-1000"></div>
+    </div>
+    <ol class="relative space-y-9">
       {steps.map((s) => (
-        <li data-reveal class="rounded-xl border border-edge bg-bg/50 p-5">
-          <span class="font-mono text-xs text-primary">{s.k}</span>
-          <h3 class="mt-1 font-display text-lg font-semibold text-ink">{s.t}</h3>
-          <p class="mt-2 text-sm text-muted">{s.d}</p>
+        <li data-reveal class="flex items-start gap-5">
+          <div class="relative z-10 grid h-14 w-14 shrink-0 place-items-center border border-edge bg-panel font-mono text-base font-bold text-primary">
+            {s.k}
+            <span class="tick tick-tl"></span>
+            <span class="tick tick-br"></span>
+          </div>
+          <div class="pt-1.5">
+            <h3 class="font-display text-lg font-bold text-ink">{s.t}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-muted">{s.d}</p>
+          </div>
         </li>
       ))}
     </ol>

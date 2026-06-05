@@ -1,4 +1,5 @@
 ---
+import Frame from './Frame.astro';
 const tabs = [
   {
     id: 'clone', label: '1 · Clone',
@@ -30,33 +31,42 @@ npm start`,
   },
 ];
 ---
-<section id="quickstart" class="mx-auto max-w-4xl px-5 py-24">
-  <div class="mx-auto mb-12 max-w-2xl text-center">
-    <h2 class="font-display text-3xl font-bold sm:text-4xl">Up and running in minutes</h2>
+<section id="quickstart" class="relative mx-auto max-w-4xl px-5 py-24 sm:py-28">
+  <div class="mb-12 max-w-2xl" data-reveal>
+    <span class="label text-primary">// 05 — Quickstart</span>
+    <h2 class="mt-3 font-display text-[clamp(2rem,4.4vw,3rem)] font-extrabold leading-tight">Up and running in minutes</h2>
     <p class="mt-4 text-muted">Two processes: the Node bot and the Python transcription sidecar.</p>
   </div>
 
-  <div data-tabs class="overflow-hidden rounded-2xl border border-edge bg-panel/40">
-    <div role="tablist" class="flex flex-wrap gap-1 border-b border-edge p-2">
-      {tabs.map((t, i) => (
-        <button
-          role="tab"
-          data-tab={t.id}
-          aria-selected={i === 0 ? 'true' : 'false'}
-          class:list={['rounded-lg px-4 py-2 text-sm transition-colors hover:text-ink', i === 0 ? 'bg-panel text-ink' : 'text-muted']}
-        >{t.label}</button>
-      ))}
-    </div>
-    {tabs.map((t, i) => (
-      <div role="tabpanel" data-panel={t.id} data-codeblock class:list={['relative', i !== 0 && 'hidden']}>
-        <button data-copy class="absolute right-4 top-4 rounded-md border border-edge bg-bg px-2.5 py-1 font-mono text-xs text-muted transition-colors hover:text-ink">Copy</button>
-        <pre class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-ink"><code>{t.code}</code></pre>
+  <div data-tabs data-reveal>
+    <Frame label="~/parley" class="overflow-hidden">
+      <span slot="status" class="flex items-center gap-1.5">
+        <span class="h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
+      </span>
+
+      <div role="tablist" class="flex flex-wrap border-b border-edge bg-bg-elevated">
+        {tabs.map((t, i) => (
+          <button
+            role="tab"
+            data-tab={t.id}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            class:list={['flex-1 whitespace-nowrap px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors hover:text-ink', i !== 0 && 'border-l border-edge', i === 0 ? 'bg-panel text-ink' : 'text-muted']}
+          >{t.label}</button>
+        ))}
       </div>
-    ))}
+      {tabs.map((t, i) => (
+        <div role="tabpanel" data-panel={t.id} data-codeblock class:list={['relative transition-opacity duration-200', i !== 0 && 'hidden opacity-0']}>
+          <button data-copy class="absolute right-4 top-4 border border-edge bg-bg px-2.5 py-1 font-mono text-xs text-muted transition-colors hover:border-primary hover:text-ink">Copy</button>
+          <pre class="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-ink"><code>{t.code}</code></pre>
+        </div>
+      ))}
+    </Frame>
   </div>
 
-  <p class="mt-6 text-center text-sm text-muted">
-    API keys live in <code class="font-mono text-ink">.env</code> only — never typed into Discord. Full docs in the
+  <p class="mt-6 font-mono text-xs text-muted" data-reveal>
+    API keys live in <code class="text-ink">.env</code> only — never typed into Discord. Full docs in the
     <a href="https://github.com/SakethKanchi/Discord_Meeting_Bot#readme" class="text-primary hover:underline">README</a>.
   </p>
 </section>
