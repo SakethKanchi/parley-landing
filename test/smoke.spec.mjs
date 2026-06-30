@@ -3,10 +3,18 @@ import { test, expect } from '@playwright/test';
 test('landing page loads with all key sections', async ({ page }) => {
   await page.goto('/parley-landing/');
   await expect(page.locator('h1')).toContainText('transcribed');
-  for (const id of ['#demo', '#features', '#how', '#privacy', '#quickstart']) {
+  for (const id of ['#demo', '#dashboard', '#features', '#how', '#privacy', '#quickstart']) {
     await expect(page.locator(id)).toHaveCount(1);
   }
   await expect(page.locator('[data-demo]')).toBeVisible();
+});
+
+test('dashboard showcase tabs swap product screenshots', async ({ page }) => {
+  await page.goto('/parley-landing/');
+  const section = page.locator('#dashboard');
+  await section.locator('[role="tab"]', { hasText: 'Analytics' }).click();
+  await expect(section.locator('[data-panel="analytics"]')).toBeVisible();
+  await expect(section.locator('[data-panel="dashboard"]')).toBeHidden();
 });
 
 test('quickstart tabs switch panels', async ({ page }) => {

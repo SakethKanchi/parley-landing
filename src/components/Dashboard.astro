@@ -1,0 +1,107 @@
+---
+import Frame from './Frame.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Real screenshots of the Parley web admin UI (seeded with a fictional
+// "Pixelforge" game studio — no real data). Captured from the live dashboard.
+const views = [
+  {
+    id: 'dashboard', label: 'Dashboard',
+    src: `${base}/shots/dashboard-dark.webp`,
+    alt: 'Parley dashboard: meeting count, talk-time, open action items, an activity chart, top speakers, and recent meetings.',
+    caption: 'Everything at a glance — counts, activity, top speakers, and the latest meetings.',
+  },
+  {
+    id: 'meetings', label: 'Meetings',
+    src: `${base}/shots/meetings-dark.webp`,
+    alt: 'Parley meetings grid: each card shows the channel, date, a TL;DR, a talk-time bar, attendees, and action-item counts.',
+    caption: 'Every recorded meeting, with a TL;DR and talk-time split on each card.',
+  },
+  {
+    id: 'reading', label: 'Notes',
+    src: `${base}/shots/reading-dark.webp`,
+    alt: 'A single meeting: TL;DR, topics, decisions, open questions, and action items grouped by person.',
+    caption: 'Open any meeting for the full notes — topics, decisions, and action items.',
+  },
+  {
+    id: 'analytics', label: 'Analytics',
+    src: `${base}/shots/analytics-dark.webp`,
+    alt: 'Parley analytics: meetings per day, talk-time by person, and words spoken per person.',
+    caption: 'Participation over time — meetings per day, talk-time, and words per person.',
+  },
+  {
+    id: 'actions', label: 'Action items',
+    src: `${base}/shots/actions-dark.webp`,
+    alt: 'Parley action items: a checklist of open tasks filtered by assignee.',
+    caption: 'A live to-do list pulled from every meeting, filterable by person.',
+  },
+  {
+    id: 'search', label: 'Search',
+    src: `${base}/shots/search-dark.webp`,
+    alt: 'Parley full-text search: results for "co-op" with the matched phrase highlighted, linking to each meeting.',
+    caption: 'Full-text search across every transcript — jump straight to the moment.',
+  },
+];
+---
+<section id="dashboard" class="relative mx-auto max-w-6xl px-5 py-24 sm:py-28">
+  <div class="mb-12 max-w-2xl" data-reveal>
+    <span class="label text-primary">// 02 — Dashboard</span>
+    <h2 class="mt-3 font-display text-[clamp(2rem,4.4vw,3rem)] font-extrabold leading-tight">
+      A control room for every meeting
+    </h2>
+    <p class="mt-4 text-muted">
+      Notes land in Discord — but the self-hosted web admin is where you browse history,
+      track action items, read full transcripts, and search across everything. Dark by
+      default, light when you want it.
+    </p>
+  </div>
+
+  <div data-tabs data-reveal>
+    <Frame label="parley // web admin" class="overflow-hidden shadow-2xl shadow-black/40">
+      <span slot="status" class="flex items-center gap-1.5">
+        <span class="h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
+      </span>
+
+      <!-- view tabs -->
+      <div role="tablist" aria-label="Dashboard views" class="flex flex-wrap border-b border-edge bg-bg-elevated">
+        {views.map((v, i) => (
+          <button
+            role="tab"
+            data-tab={v.id}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            class:list={['whitespace-nowrap px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors hover:text-ink', i !== 0 && 'border-l border-edge', i === 0 ? 'bg-panel text-ink' : 'text-muted']}
+          >{v.label}</button>
+        ))}
+      </div>
+
+      <!-- view panels: real product screenshots -->
+      {views.map((v, i) => (
+        <div
+          role="tabpanel"
+          data-panel={v.id}
+          class:list={['relative transition-opacity duration-200', i !== 0 && 'hidden opacity-0']}
+        >
+          <div class="aspect-[16/10] w-full overflow-hidden bg-bg">
+            <img
+              src={v.src}
+              alt={v.alt}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              class="h-full w-full object-cover object-top"
+            />
+          </div>
+          <div class="flex items-center gap-2 border-t border-edge px-4 py-2.5">
+            <span class="live-dot"></span>
+            <span class="font-mono text-xs text-muted">{v.caption}</span>
+          </div>
+        </div>
+      ))}
+    </Frame>
+  </div>
+
+  <p class="mt-6 font-mono text-xs text-muted" data-reveal>
+    Runs alongside the bot — one command, your hardware, your database.
+    <code class="text-ink">npm run web</code> serves it locally.
+  </p>
+</section>
