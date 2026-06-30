@@ -1,0 +1,44 @@
+Parley — launch brag video
+Output: brag-output/brag.mp4 (1920x1080, 25s, with audio)
+
+──────────────────────────────────────────────
+PRIMARY CAPTION
+──────────────────────────────────────────────
+Watched my Discord standup turn into a clean decision log — TL;DR, decisions,
+action items, talk-time — without a single byte of audio leaving my machine.
+
+Parley: a self-hosted Discord meeting-notes bot. Per-speaker transcription runs
+locally, AI notes post to a thread, and a self-hosted web dashboard keeps the
+whole history, action items, and search in one place. Free, open, ISC.
+→ github.com/SakethKanchi/parley
+
+──────────────────────────────────────────────
+X / TWITTER
+──────────────────────────────────────────────
+Your Discord meetings, transcribed and summarized — locally.
+
+Parley records voice, transcribes per-speaker on your own machine, drops
+structured AI notes into a thread, and gives you a self-hosted web dashboard for
+history, action items, and search. No audio leaves your box. Free, ISC.
+
+github.com/SakethKanchi/parley
+
+──────────────────────────────────────────────
+LINKEDIN
+──────────────────────────────────────────────
+Most meeting-notes tools ship your audio to someone else's cloud. Parley doesn't.
+
+It's a self-hosted Discord bot: it joins your voice channel, transcribes every
+speaker locally with faster-whisper, and posts AI-generated notes — TL;DR,
+decisions, action items, and talk-time — into a Discord thread. A self-hosted web
+dashboard keeps every meeting, action item, and full-text search in one place.
+Pluggable summarizer (Gemini, any OpenAI endpoint, or fully-offline Ollama).
+
+Open source, ISC-licensed, free. github.com/SakethKanchi/parley
+
+──────────────────────────────────────────────
+DISCORD / SHORT
+──────────────────────────────────────────────
+parley turns your voice standup into clean notes — per-speaker, local, posted to
+a thread, all browsable in a self-hosted dashboard. no audio leaves your machine.
+free 👉 github.com/SakethKanchi/parley

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Manrope"; font-weight: 400; font-style: normal;
+        src: url("assets/fonts/manrope-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Manrope"; font-weight: 600; font-style: normal;
+        src: url("assets/fonts/manrope-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Bricolage Grotesque"; font-weight: 700; font-style: normal;
+        src: url("assets/fonts/bricolage-grotesque-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; font-style: normal;
+        src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --bg: #08090E;
+        --panel: #11131B;
+        --panel2: #191C28;
+        --edge: #232838;
+        --primary: #5B6BFF;
+        --accent: #2FD673;
+        --ink: #E9EBF4;
+        --muted: #888FA6;
+        --rec: #FF4D4D;
+      }
+      html, body {
+        width: 1920px; height: 1080px; overflow: hidden;
+        background: var(--bg); color: var(--ink);
+        font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+      }
+      /* persistent instrument grid */
+      body::before {
+        content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        background-image:
+          linear-gradient(rgba(120,130,180,0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(120,130,180,0.05) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+      .display { font-family: "Bricolage Grotesque", "Manrope", sans-serif; font-weight: 800; }
+      .label {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+      }
+      .scene {
+        position: absolute; inset: 0; opacity: 0;
+        display: flex; align-items: center; justify-content: center;
+        padding: 90px; box-sizing: border-box;
+      }
+      #scene1 { z-index: 1; } #scene2 { z-index: 2; } #scene3 { z-index: 3; }
+      #scene4 { z-index: 4; } #scene5 { z-index: 5; } #scene6 { z-index: 6; }
+
+      /* ---------- Scene 1 ---------- */
+      .frame {
+        width: 1180px; border: 1px solid var(--edge); background: rgba(17,19,27,0.72);
+        box-shadow: 0 40px 90px rgba(0,0,0,0.55);
+      }
+      .frame-bar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 16px 22px; border-bottom: 1px solid var(--edge); background: rgba(8,9,14,0.5);
+      }
+      .rec { display: inline-flex; align-items: center; gap: 9px; font-family: "JetBrains Mono", monospace;
+        font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rec); }
+      .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rec); display: inline-block; }
+      .scope-wrap { position: relative; height: 220px; background: rgba(8,9,14,0.45);
+        border-bottom: 1px solid var(--edge); overflow: hidden; }
+      .scope-grid { position: absolute; inset: 0; pointer-events: none;
+        background-image:
+          linear-gradient(rgba(120,130,180,0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(120,130,180,0.06) 1px, transparent 1px);
+        background-size: 36px 36px; }
+      #s1-line { padding: 44px 48px 50px; text-align: left; }
+      #s1-line .big { font-size: 62px; line-height: 1.04; font-weight: 800;
+        font-family: "Bricolage Grotesque","Manrope",sans-serif; letter-spacing: -0.015em; }
+      #s1-line .accent { color: var(--accent); }
+
+      /* ---------- Scene 2 ---------- */
+      .panel { width: 1240px; border: 1px solid var(--edge); background: var(--panel);
+        box-shadow: 0 40px 90px rgba(0,0,0,0.55); }
+      .panel-head { display: flex; align-items: center; gap: 12px; padding: 18px 26px;
+        border-bottom: 1px solid var(--edge); }
+      .crumb { font-family: "JetBrains Mono", monospace; font-size: 16px; color: var(--muted); }
+      .crumb b { color: var(--ink); font-weight: 600; }
+      .roster { display: flex; gap: 40px; padding: 26px 30px 8px; }
+      .who { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 120px; }
+      .av { position: relative; width: 60px; height: 60px; border-radius: 50%;
+        display: grid; place-items: center; color: #fff; font-weight: 700;
+        font-family: "JetBrains Mono", monospace; font-size: 17px; }
+      .av .glow { position: absolute; inset: -6px; border-radius: 50%; opacity: 0;
+        box-shadow: 0 0 26px 4px currentColor; }
+      .who .h { font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--ink); }
+      .who .r { font-size: 12px; color: var(--muted); }
+      .msgs { padding: 14px 30px 8px; display: flex; flex-direction: column; gap: 16px; }
+      .msg { display: flex; align-items: center; gap: 16px; }
+      .msg .mav { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+        color: #fff; font-weight: 700; font-family: "JetBrains Mono", monospace; font-size: 13px; flex: none; }
+      .msg .mh { font-family: "JetBrains Mono", monospace; font-size: 17px; font-weight: 600; margin-right: 4px; }
+      .msg .mt { font-size: 26px; color: var(--ink); }
+      .panel-foot { display: flex; align-items: center; justify-content: space-between;
+        padding: 16px 30px; border-top: 1px solid var(--edge); margin-top: 10px; }
+      .thread-tag { font-family: "JetBrains Mono", monospace; font-size: 15px; color: var(--accent);
+        letter-spacing: 0.08em; }
+
+      /* ---------- Scene 3 ---------- */
+      .notes { width: 1240px; border: 1px solid var(--edge); background: var(--panel);
+        box-shadow: 0 40px 90px rgba(0,0,0,0.55); }
+      .notes-head { display: flex; align-items: center; justify-content: space-between;
+        padding: 22px 30px; border-bottom: 1px solid var(--edge); }
+      .notes-title { font-family: "Bricolage Grotesque","Manrope",sans-serif; font-weight: 800;
+        font-size: 30px; letter-spacing: 0.02em; }
+      .notes-title .pri { color: var(--primary); }
+      .notes-body { padding: 26px 32px 30px; display: flex; flex-direction: column; gap: 22px; }
+      .tldr-text { font-size: 30px; line-height: 1.3; color: var(--ink); max-width: 1080px; }
+      .row-label { margin-bottom: 12px; }
+      .chips { display: flex; gap: 14px; flex-wrap: wrap; }
+      .chip { font-family: "JetBrains Mono", monospace; font-size: 21px; color: var(--ink);
+        border: 1px solid var(--edge); background: var(--panel2); padding: 12px 18px; }
+      .chip .ck { color: var(--accent); margin-right: 8px; }
+      .tt { display: flex; flex-direction: column; gap: 10px; max-width: 920px; }
+      .tt-row { display: flex; align-items: center; gap: 16px; }
+      .tt-h { font-family: "JetBrains Mono", monospace; font-size: 16px; color: var(--muted); width: 150px; }
+      .tt-track { flex: 1; height: 14px; background: var(--panel2); border: 1px solid var(--edge); position: relative; }
+      .tt-bar-fill { height: 100%; transform-origin: left center; }
+      .tt-pct { font-family: "JetBrains Mono", monospace; font-size: 16px; color: var(--ink);
+        width: 56px; text-align: right; font-variant-numeric: tabular-nums; }
+
+      /* ---------- Scene 4 ---------- */
+      .feat-wrap { display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%; }
+      .cards { display: flex; gap: 30px; }
+      .fcard { width: 380px; min-height: 320px; border: 1px solid var(--edge); background: var(--panel);
+        padding: 36px 32px; display: flex; flex-direction: column; gap: 20px;
+        box-shadow: 0 30px 70px rgba(0,0,0,0.45); }
+      .fcard .ic { width: 46px; height: 46px; color: var(--accent); }
+      .fcard h3 { font-family: "Bricolage Grotesque","Manrope",sans-serif; font-weight: 800;
+        font-size: 30px; color: var(--ink); line-height: 1.1; }
+      .fcard p { font-size: 21px; line-height: 1.45; color: var(--muted); }
+      .fcard .pin { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--primary);
+        letter-spacing: 0.14em; text-transform: uppercase; margin-top: auto; }
+
+      /* ---------- Scene 5 — web dashboard ---------- */
+      .browser { width: 1500px; border: 1px solid var(--edge); background: var(--panel);
+        box-shadow: 0 50px 110px rgba(0,0,0,0.6); overflow: hidden; }
+      .browser-bar { display: flex; align-items: center; justify-content: space-between;
+        padding: 14px 22px; border-bottom: 1px solid var(--edge); background: rgba(8,9,14,0.6); }
+      .browser-bar .dots { display: flex; gap: 9px; }
+      .browser-bar .bd { width: 13px; height: 13px; border-radius: 50%; }
+      .browser-shot { position: relative; width: 100%; height: 720px; overflow: hidden; background: var(--bg); }
+      .browser-shot img { position: absolute; top: 0; left: 0; width: 100%; height: auto;
+        display: block; transform-origin: 50% 22%; }
+      .s5-pills { display: flex; gap: 14px; padding: 18px 24px; border-top: 1px solid var(--edge);
+        justify-content: center; background: rgba(8,9,14,0.4); }
+      .s5-pill { font-family: "JetBrains Mono", monospace; font-size: 18px; color: var(--ink);
+        border: 1px solid var(--edge); background: var(--panel2); padding: 10px 18px; letter-spacing: 0.04em; }
+      .s5-pill .pk { color: var(--accent); margin-right: 9px; }
+      .s5-cap { position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+        font-family: "JetBrains Mono", monospace; font-size: 16px; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted); }
+
+      /* ---------- Scene 6 ---------- */
+      .outro { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+      .wordmark { font-family: "Bricolage Grotesque","Manrope",sans-serif; font-weight: 800;
+        font-size: 150px; letter-spacing: -0.02em; line-height: 1; display: inline-flex; align-items: flex-end; }
+      .wordmark .pdot { width: 22px; height: 22px; border-radius: 50%; background: var(--accent);
+        margin-left: 14px; margin-bottom: 26px; }
+      .tag { font-size: 32px; color: var(--ink); }
+      .credit { font-family: "JetBrains Mono", monospace; font-size: 20px; color: var(--muted);
+        letter-spacing: 0.04em; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-at0g" id="root" data-composition-id="main" data-start="0" data-duration="25" data-width="1920" data-height="1080">
+
+      <!-- ===================== SCENE 1 — HOOK ===================== -->
+      <div data-hf-id="hf-zet7" id="scene1" class="scene">
+        <div data-hf-id="hf-kgs1" id="s1-frame" class="frame">
+          <div data-hf-id="hf-u7fj" class="frame-bar">
+            <span data-hf-id="hf-w7ig" id="s1-reclabel" class="label">LIVE // VOICE CAPTURE</span>
+            <span data-hf-id="hf-twyw" id="s1-rec" class="rec"><span data-hf-id="hf-g2bm" id="s1-recdot" class="dot"></span> REC</span>
+          </div>
+          <div data-hf-id="hf-ziht" class="scope-wrap">
+            <svg data-hf-id="hf-yi8e" viewBox="0 0 1180 220" preserveAspectRatio="none" width="100%" height="100%">
+              <path data-hf-id="hf-7mqu" id="s1-wave" fill="none" stroke="#2FD673" stroke-width="2.5" vector-effect="non-scaling-stroke" />
+            </svg>
+            <div data-hf-id="hf-ttwd" class="scope-grid"></div>
+          </div>
+          <div data-hf-id="hf-hzxo" id="s1-line">
+            <div data-hf-id="hf-k6z8" class="big">No audio leaves<br data-hf-id="hf-x5px">your <span data-hf-id="hf-6dec" class="accent">machine</span>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SCENE 2 — LIVE MEETING ===================== -->
+      <div data-hf-id="hf-qqxc" id="scene2" class="scene">
+        <div data-hf-id="hf-94hi" id="s2-panel" class="panel">
+          <div data-hf-id="hf-q0je" id="s2-header" class="panel-head">
+            <span data-hf-id="hf-0q7k" class="crumb">Pixelforge › <b data-hf-id="hf-ro6s">#launch-week</b> · Launch Week Sync</span>
+          </div>
+          <div data-hf-id="hf-vmep" class="roster">
+            <div data-hf-id="hf-tu8n" class="who s2-avatar"><div data-hf-id="hf-v9ud" id="av-pp" class="av" style="background:#5865F2;color:#5865F2"><span data-hf-id="hf-eeyy" style="color:#fff">PP</span><span data-hf-id="hf-f34e" class="glow"></span></div><span data-hf-id="hf-zvlo" class="h">PixelPaladin</span><span data-hf-id="hf-ue1w" class="r">Lead dev</span></div>
+            <div data-hf-id="hf-du1j" class="who s2-avatar"><div data-hf-id="hf-oz8d" id="av-rr" class="av" style="background:#EB459E;color:#EB459E"><span data-hf-id="hf-kftq" style="color:#fff">RR</span><span data-hf-id="hf-jdea" class="glow"></span></div><span data-hf-id="hf-14ub" class="h">RespawnRita</span><span data-hf-id="hf-hlbb" class="r">QA</span></div>
+            <div data-hf-id="hf-dfqi" class="who s2-avatar"><div data-hf-id="hf-09lg" id="av-lg" class="av" style="background:#FAA61A;color:#FAA61A"><span data-hf-id="hf-zdi7" style="color:#fff">LG</span><span data-hf-id="hf-jrpb" class="glow"></span></div><span data-hf-id="hf-7lqq" class="h">LootGoblin</span><span data-hf-id="hf-2a6c" class="r">Designer</span></div>
+            <div data-hf-id="hf-d1fh" class="who s2-avatar"><div data-hf-id="hf-zfhp" id="av-nn" class="av" style="background:#23A559;color:#23A559"><span data-hf-id="hf-bcye" style="color:#fff">NN</span><span data-hf-id="hf-k60c" class="glow"></span></div><span data-hf-id="hf-1kgu" class="h">NoScopeNova</span><span data-hf-id="hf-k1ym" class="r">Community</span></div>
+          </div>
+          <div data-hf-id="hf-1w6y" class="msgs">
+            <div data-hf-id="hf-tgq1" id="s2-m1" class="msg"><span data-hf-id="hf-0c3g" class="mav" style="background:#5865F2">PP</span><span data-hf-id="hf-z6hp" class="mh" style="color:#8b95ff">PixelPaladin</span><span data-hf-id="hf-d3gf" class="mt">Build is green on main.</span></div>
+            <div data-hf-id="hf-zmfu" id="s2-m2" class="msg"><span data-hf-id="hf-u58e" class="mav" style="background:#EB459E">RR</span><span data-hf-id="hf-wyur" class="mh" style="color:#f57bc0">RespawnRita</span><span data-hf-id="hf-2rel" class="mt">Co-op desyncs on level 3.</span></div>
+            <div data-hf-id="hf-3kjv" id="s2-m3" class="msg"><span data-hf-id="hf-f3qs" class="mav" style="background:#5865F2">PP</span><span data-hf-id="hf-tj1t" class="mh" style="color:#8b95ff">PixelPaladin</span><span data-hf-id="hf-gf3a" class="mt">Freeze scope today or we miss Friday.</span></div>
+          </div>
+          <div data-hf-id="hf-2j9u" id="s2-footer" class="panel-foot">
+            <span data-hf-id="hf-q6bd" class="label">whisper · local · per-speaker</span>
+            <span data-hf-id="hf-093s" class="thread-tag">→ thread</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SCENE 3 — NOTES FORM ===================== -->
+      <div data-hf-id="hf-ril5" id="scene3" class="scene">
+        <div data-hf-id="hf-fyjq" id="s3-card" class="notes">
+          <div data-hf-id="hf-f72m" class="notes-head">
+            <span data-hf-id="hf-8hpa" id="s3-head" class="notes-title">AI <span data-hf-id="hf-1t1l" class="pri">NOTES</span></span>
+            <span data-hf-id="hf-wm4v" id="s3-thread" class="thread-tag" style="font-size:18px">→ posted to thread</span>
+          </div>
+          <div data-hf-id="hf-7mys" class="notes-body">
+            <div data-hf-id="hf-yeow">
+              <div data-hf-id="hf-ri1u" class="label row-label">TL;DR</div>
+              <div data-hf-id="hf-6g00" id="s3-tldr" class="tldr-text">Solo mode ships Friday. Co-op cut to a week-1 patch. Trailer Wednesday.</div>
+            </div>
+            <div data-hf-id="hf-y7yw">
+              <div data-hf-id="hf-ssa9" id="s3-declabel" class="label row-label">Decisions</div>
+              <div data-hf-id="hf-exrd" class="chips">
+                <div data-hf-id="hf-h9f5" id="chip1" class="chip"><span data-hf-id="hf-51x0" class="ck">✓</span>Launch: Friday</div>
+                <div data-hf-id="hf-xkts" id="chip2" class="chip"><span data-hf-id="hf-juh8" class="ck">✓</span>Co-op → week-1 patch</div>
+                <div data-hf-id="hf-bf3q" id="chip3" class="chip"><span data-hf-id="hf-ink5" class="ck">✓</span>Scope frozen today</div>
+              </div>
+            </div>
+            <div data-hf-id="hf-x11t">
+              <div data-hf-id="hf-gf9u" id="s3-ttlabel" class="label row-label">Talk-time</div>
+              <div data-hf-id="hf-3ri0" class="tt">
+                <div data-hf-id="hf-xu5j" class="tt-row"><span data-hf-id="hf-07bl" class="tt-h">PixelPaladin</span><div data-hf-id="hf-b6qa" class="tt-track"><div data-hf-id="hf-cdb8" class="tt-bar-fill" style="width:38%;background:#5865F2"></div></div><span data-hf-id="hf-aq5n" class="tt-pct">38%</span></div>
+                <div data-hf-id="hf-tkef" class="tt-row"><span data-hf-id="hf-acjs" class="tt-h">RespawnRita</span><div data-hf-id="hf-88wm" class="tt-track"><div data-hf-id="hf-fh7m" class="tt-bar-fill" style="width:27%;background:#EB459E"></div></div><span data-hf-id="hf-jm53" class="tt-pct">27%</span></div>
+                <div data-hf-id="hf-t63e" class="tt-row"><span data-hf-id="hf-3chl" class="tt-h">NoScopeNova</span><div data-hf-id="hf-8n7n" class="tt-track"><div data-hf-id="hf-9mgi" class="tt-bar-fill" style="width:20%;background:#23A559"></div></div><span data-hf-id="hf-7w8o" class="tt-pct">20%</span></div>
+                <div data-hf-id="hf-srsd" class="tt-row"><span data-hf-id="hf-in87" class="tt-h">LootGoblin</span><div data-hf-id="hf-91io" class="tt-track"><div data-hf-id="hf-kwzf" class="tt-bar-fill" style="width:15%;background:#FAA61A"></div></div><span data-hf-id="hf-dqj4" class="tt-pct">15%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SCENE 4 — FEATURES ===================== -->
+      <div data-hf-id="hf-gn3i" id="scene4" class="scene">
+        <div data-hf-id="hf-gn99" class="feat-wrap">
+          <div data-hf-id="hf-jg7k" id="s4-eyebrow" class="label" style="font-size:18px">// What you get</div>
+          <div data-hf-id="hf-5cwd" class="cards">
+            <div data-hf-id="hf-1uzj" id="feat1" class="fcard">
+              <svg data-hf-id="hf-c2lw" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle data-hf-id="hf-jnj3" cx="12" cy="8" r="4" /><path data-hf-id="hf-90pw" d="M5 21a7 7 0 0 1 14 0" /></svg>
+              <h3 data-hf-id="hf-9bhm">Per-speaker attribution</h3>
+              <p data-hf-id="hf-92hp">Every line tied to the right person — not guessed by a model.</p>
+              <span data-hf-id="hf-d045" class="pin">Discord audio streams</span>
+            </div>
+            <div data-hf-id="hf-t73o" id="feat2" class="fcard">
+              <svg data-hf-id="hf-9qvg" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path data-hf-id="hf-b9mp" d="M12 3v18M8 7v10M16 7v10M4 10v4M20 10v4" /></svg>
+              <h3 data-hf-id="hf-k4rd">Local speech-to-text</h3>
+              <p data-hf-id="hf-ysmg">A warm faster-whisper sidecar runs on your own hardware.</p>
+              <span data-hf-id="hf-1hze" class="pin">tiny → large-v3-turbo</span>
+            </div>
+            <div data-hf-id="hf-tyrh" id="feat3" class="fcard">
+              <svg data-hf-id="hf-8jyd" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path data-hf-id="hf-gf8m" d="M4 7h16M4 12h16M4 17h10" /></svg>
+              <h3 data-hf-id="hf-wg0a">Pluggable summarizer</h3>
+              <p data-hf-id="hf-yity">Gemini, any OpenAI endpoint, or fully-offline Ollama.</p>
+              <span data-hf-id="hf-mqn8" class="pin">Switch per server</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SCENE 5 — WEB DASHBOARD ===================== -->
+      <div data-hf-id="hf-web0" id="scene5" class="scene">
+        <div data-hf-id="hf-web1" id="s5-browser" class="browser">
+          <div data-hf-id="hf-web2" class="browser-bar">
+            <span data-hf-id="hf-web3" class="label" style="font-size:14px">parley // web admin</span>
+            <span data-hf-id="hf-web4" class="dots">
+              <span data-hf-id="hf-web5" class="bd" style="background:#ff5f57"></span>
+              <span data-hf-id="hf-web6" class="bd" style="background:#febc2e"></span>
+              <span data-hf-id="hf-web7" class="bd" style="background:#28c840"></span>
+            </span>
+          </div>
+          <div data-hf-id="hf-web8" class="browser-shot">
+            <img data-hf-id="hf-web9" id="s5-img" data-layout-allow-overflow src="assets/shots/dashboard-dark.webp" alt="Parley web dashboard">
+          </div>
+          <div data-hf-id="hf-weba" class="s5-pills">
+            <div data-hf-id="hf-webb" id="s5-pill1" class="s5-pill"><span data-hf-id="hf-webc" class="pk">▸</span>Browse history</div>
+            <div data-hf-id="hf-webd" id="s5-pill2" class="s5-pill"><span data-hf-id="hf-webe" class="pk">▸</span>Track action items</div>
+            <div data-hf-id="hf-webf" id="s5-pill3" class="s5-pill"><span data-hf-id="hf-webg" class="pk">▸</span>Search transcripts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== SCENE 6 — OUTRO ===================== -->
+      <div data-hf-id="hf-kl7j" id="scene6" class="scene">
+        <div data-hf-id="hf-e0lx" class="outro">
+          <div data-hf-id="hf-ok8u" id="s5-wordmark" class="wordmark">Parley<span data-hf-id="hf-e780" id="s5-dot" class="pdot"></span></div>
+          <div data-hf-id="hf-1qjd" id="s5-tag" class="tag">Self-hosted Discord meeting notes.</div>
+          <div data-hf-id="hf-rikp" id="s5-credit" class="credit">github.com/SakethKanchi/parley · ISC · Free</div>
+        </div>
+      </div>
+
+      <!-- ===================== AUDIO ===================== -->
+      <audio data-hf-id="hf-07nm" id="bed" class="clip" data-start="0" data-duration="25" data-track-index="2" data-volume="0.4" src="assets/music/bed.mp3"></audio>
+      <audio data-hf-id="hf-747t" id="sfx-tick" class="clip" data-start="2.05" data-duration="1" data-track-index="3" data-volume="0.5" src="assets/sfx/hook-tick.ogg"></audio>
+      <audio data-hf-id="hf-vf4e" id="sfx-pop1" class="clip" data-start="3.70" data-duration="1" data-track-index="4" data-volume="0.55" src="assets/sfx/line-pop.ogg"></audio>
+      <audio data-hf-id="hf-b6de" id="sfx-pop2" class="clip" data-start="4.75" data-duration="1" data-track-index="5" data-volume="0.55" src="assets/sfx/line-pop.ogg"></audio>
+      <audio data-hf-id="hf-9act" id="sfx-pop3" class="clip" data-start="5.80" data-duration="1" data-track-index="6" data-volume="0.55" src="assets/sfx/line-pop.ogg"></audio>
+      <audio data-hf-id="hf-j1fm" id="sfx-tldr" class="clip" data-start="8.44" data-duration="1" data-track-index="7" data-volume="0.5" src="assets/sfx/line-pop.ogg"></audio>
+      <audio data-hf-id="hf-rlfn" id="sfx-chip1" class="clip" data-start="9.50" data-duration="1" data-track-index="8" data-volume="0.55" src="assets/sfx/chip-1.ogg"></audio>
+      <audio data-hf-id="hf-4820" id="sfx-chip2" class="clip" data-start="10.54" data-duration="1" data-track-index="9" data-volume="0.55" src="assets/sfx/chip-2.ogg"></audio>
+      <audio data-hf-id="hf-ds30" id="sfx-chip3" class="clip" data-start="11.60" data-duration="1" data-track-index="10" data-volume="0.55" src="assets/sfx/chip-3.ogg"></audio>
+      <audio data-hf-id="hf-8uv2" id="sfx-send" class="clip" data-start="12.15" data-duration="1" data-track-index="11" data-volume="0.45" src="assets/sfx/send.ogg"></audio>
+      <audio data-hf-id="hf-pkle" id="sfx-card1" class="clip" data-start="13.70" data-duration="1" data-track-index="12" data-volume="0.5" src="assets/sfx/card-1.ogg"></audio>
+      <audio data-hf-id="hf-nhxo" id="sfx-card2" class="clip" data-start="14.76" data-duration="1" data-track-index="13" data-volume="0.5" src="assets/sfx/card-2.ogg"></audio>
+      <audio data-hf-id="hf-rlya" id="sfx-card3" class="clip" data-start="15.81" data-duration="1" data-track-index="14" data-volume="0.5" src="assets/sfx/card-3.ogg"></audio>
+      <!-- Scene 5 web dashboard: frame slam + 3 pill snaps -->
+      <audio data-hf-id="hf-webx" id="sfx-dash" class="clip" data-start="17.05" data-duration="1.2" data-track-index="15" data-volume="0.6" src="assets/sfx/send.ogg"></audio>
+      <audio data-hf-id="hf-webp1" id="sfx-p1" class="clip" data-start="18.30" data-duration="1" data-track-index="16" data-volume="0.5" src="assets/sfx/chip-1.ogg"></audio>
+      <audio data-hf-id="hf-webp2" id="sfx-p2" class="clip" data-start="18.85" data-duration="1" data-track-index="17" data-volume="0.5" src="assets/sfx/chip-2.ogg"></audio>
+      <audio data-hf-id="hf-webp3" id="sfx-p3" class="clip" data-start="19.40" data-duration="1" data-track-index="18" data-volume="0.5" src="assets/sfx/chip-3.ogg"></audio>
+      <!-- Scene 6 outro slam — beat-locked ~22.64 -->
+      <audio data-hf-id="hf-6mm3" id="sfx-slam" class="clip" data-start="21.55" data-duration="1.5" data-track-index="19" data-volume="0.72" src="assets/sfx/slam.ogg"></audio>
+    </div>
+
+    <script>
+      // ---- deterministic waveform (no Math.random) ----
+      function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+      (function(){
+        const rnd = mulberry32(7);
+        const W = 1180, mid = 110; let d = "M 0 " + mid;
+        for (let x = 0; x <= W; x += 12) {
+          const env = 0.35 + 0.65 * Math.abs(Math.sin(x / 150));
+          const y = mid + Math.sin(x / 17) * 44 * env + (rnd() - 0.5) * 26 * env;
+          d += " L " + x + " " + y.toFixed(1);
+        }
+        const wave = document.getElementById("s1-wave");
+        wave.setAttribute("d", d);
+        const len = wave.getTotalLength ? wave.getTotalLength() : 4000;
+        wave.style.strokeDasharray = len;
+        wave.style.strokeDashoffset = len;
+      })();
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---------- SCENE 1 (0–3) ---------- */
+      tl.to("#scene1", { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.1);
+      tl.from("#s1-frame", { scale: 0.96, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.15);
+      tl.from("#s1-reclabel", { opacity: 0, x: -12, duration: 0.4, ease: "power2.out" }, 0.4);
+      tl.from("#s1-rec", { opacity: 0, x: 12, duration: 0.4, ease: "power2.out" }, 0.5);
+      tl.to("#s1-wave", { strokeDashoffset: 0, duration: 1.35, ease: "power1.inOut" }, 0.45);
+      tl.to("#s1-recdot", { opacity: 0.25, scale: 0.75, duration: 0.45, ease: "sine.inOut", repeat: 4, yoyo: true }, 0.6);
+      // headline slam — beat-locked: 2.12
+      tl.from("#s1-line", { opacity: 0, y: 44, scale: 0.94, duration: 0.55, ease: "back.out(1.6)" }, 2.05);
+      tl.to("#scene1", { opacity: 0, duration: 0.5, ease: "power2.in" }, 2.75);
+      tl.set("#scene1", { visibility: "hidden" }, 3.25);
+
+      /* ---------- SCENE 2 (3–8) ---------- */
+      tl.to("#scene2", { opacity: 1, duration: 0.5, ease: "power2.out" }, 2.75);
+      tl.from("#s2-panel", { scale: 0.97, opacity: 0, y: 22, duration: 0.6, ease: "power3.out" }, 2.85);
+      tl.from("#s2-header", { opacity: 0, y: -12, duration: 0.4, ease: "power2.out" }, 3.0);
+      tl.from(".s2-avatar", { opacity: 0, y: 16, scale: 0.9, duration: 0.5, stagger: 0.08, ease: "back.out(1.5)" }, 3.1);
+      tl.from("#s2-footer", { opacity: 0, duration: 0.4, ease: "power1.out" }, 3.35);
+      // speaker lines — beat-grid: 3.70, 4.75, 5.80
+      tl.from("#s2-m1", { opacity: 0, x: -26, duration: 0.45, ease: "power3.out" }, 3.70);
+      tl.fromTo("#av-pp .glow", { opacity: 0 }, { opacity: 0.95, duration: 0.28, yoyo: true, repeat: 1, ease: "sine.inOut" }, 3.70);
+      tl.from("#s2-m2", { opacity: 0, x: -26, duration: 0.45, ease: "power2.out" }, 4.75);
+      tl.fromTo("#av-rr .glow", { opacity: 0 }, { opacity: 0.95, duration: 0.28, yoyo: true, repeat: 1, ease: "sine.inOut" }, 4.75);
+      tl.from("#s2-m3", { opacity: 0, x: -26, duration: 0.45, ease: "expo.out" }, 5.80);
+      tl.fromTo("#av-pp .glow", { opacity: 0 }, { opacity: 0.95, duration: 0.28, yoyo: true, repeat: 1, ease: "sine.inOut" }, 5.80);
+      tl.to("#scene2", { opacity: 0, duration: 0.5, ease: "power2.in" }, 7.75);
+      tl.set("#scene2", { visibility: "hidden" }, 8.25);
+
+      /* ---------- SCENE 3 (8–13) ---------- */
+      tl.to("#scene3", { opacity: 1, duration: 0.5, ease: "power2.out" }, 7.75);
+      tl.from("#s3-card", { scale: 0.97, opacity: 0, y: 22, duration: 0.6, ease: "power3.out" }, 7.85);
+      tl.from("#s3-head", { opacity: 0, y: -12, duration: 0.4, ease: "power2.out" }, 8.0);
+      tl.from("#s3-thread", { opacity: 0, x: 14, duration: 0.4, ease: "power2.out" }, 8.1);
+      // TL;DR — beat-locked: 8.44 (strong cue)
+      tl.from("#s3-tldr", { opacity: 0, y: 18, duration: 0.5, ease: "power3.out" }, 8.44);
+      tl.from("#s3-declabel", { opacity: 0, duration: 0.3, ease: "power1.out" }, 9.2);
+      // decision chips — beat-grid: 9.50, 10.54, 11.60
+      tl.from("#chip1", { opacity: 0, scale: 0.8, y: 12, duration: 0.4, ease: "back.out(1.7)" }, 9.50);
+      tl.from("#chip2", { opacity: 0, scale: 0.8, y: 12, duration: 0.4, ease: "back.out(1.7)" }, 10.54);
+      tl.from("#chip3", { opacity: 0, scale: 0.8, y: 12, duration: 0.4, ease: "back.out(1.7)" }, 11.60);
+      tl.from("#s3-ttlabel", { opacity: 0, duration: 0.3, ease: "power1.out" }, 11.85);
+      tl.from(".tt-bar-fill", { scaleX: 0, duration: 0.6, stagger: 0.07, ease: "power2.out" }, 12.05);
+      // thread "send" pulse — 12.15
+      tl.to("#s3-thread", { scale: 1.12, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", transformOrigin: "right center" }, 12.15);
+      tl.to("#scene3", { opacity: 0, duration: 0.5, ease: "power2.in" }, 12.75);
+      tl.set("#scene3", { visibility: "hidden" }, 13.25);
+
+      /* ---------- SCENE 4 (13–16.6): feature cards ---------- */
+      tl.to("#scene4", { opacity: 1, duration: 0.5, ease: "power2.out" }, 12.75);
+      tl.from("#s4-eyebrow", { opacity: 0, y: -12, duration: 0.4, ease: "power2.out" }, 13.0);
+      // feature cards — beat-grid: 13.70, 14.76, 15.81
+      tl.from("#feat1", { opacity: 0, y: 44, duration: 0.5, ease: "power3.out" }, 13.70);
+      tl.from("#feat2", { opacity: 0, y: 44, duration: 0.5, ease: "back.out(1.4)" }, 14.76);
+      tl.from("#feat3", { opacity: 0, y: 44, duration: 0.5, ease: "expo.out" }, 15.81);
+      tl.to("#scene4", { opacity: 0, duration: 0.5, ease: "power2.in" }, 16.55);
+      tl.set("#scene4", { visibility: "hidden" }, 17.05);
+
+      /* ---------- SCENE 5 (16.6–20.6): the web dashboard ---------- */
+      tl.to("#scene5", { opacity: 1, duration: 0.5, ease: "power2.out" }, 16.55);
+      // browser frame slams in (sfx-dash @ 17.05)
+      tl.from("#s5-browser", { scale: 0.94, opacity: 0, y: 26, duration: 0.6, ease: "power3.out" }, 16.7);
+      // slow Ken-Burns push on the real screenshot — sells "live product"
+      tl.fromTo("#s5-img", { scale: 1.0 }, { scale: 1.085, duration: 3.6, ease: "none" }, 17.0);
+      // pills snap in one by one — beat-grid: 18.30, 18.85, 19.40
+      tl.from("#s5-pill1", { opacity: 0, scale: 0.8, y: 12, duration: 0.4, ease: "back.out(1.7)" }, 18.30);
+      tl.from("#s5-pill2", { opacity: 0, scale: 0.8, y: 12, duration: 0.4, ease: "back.out(1.7)" }, 18.85);
+      tl.from("#s5-pill3", { opacity: 0, scale: 0.8, y: 12, duration: 0.4, ease: "back.out(1.7)" }, 19.40);
+      tl.to("#scene5", { opacity: 0, duration: 0.5, ease: "power2.in" }, 20.55);
+      tl.set("#scene5", { visibility: "hidden" }, 21.05);
+
+      /* ---------- SCENE 6 (20.6–25): outro / wordmark ---------- */
+      tl.to("#scene6", { opacity: 1, duration: 0.5, ease: "power2.out" }, 20.55);
+      // wordmark slam — beat-locked ~21.55 (sfx-slam)
+      tl.from("#s5-wordmark", { opacity: 0, scale: 0.8, duration: 0.5, ease: "back.out(1.7)" }, 21.55);
+      tl.from("#s5-dot", { opacity: 0, scale: 0, duration: 0.4, ease: "back.out(2)" }, 21.9);
+      tl.from("#s5-tag", { opacity: 0, y: 20, duration: 0.5, ease: "power3.out" }, 22.15);
+      tl.from("#s5-credit", { opacity: 0, y: 14, duration: 0.5, ease: "power2.out" }, 22.45);
+      tl.to("#s5-dot", { opacity: 0.4, duration: 0.6, yoyo: true, repeat: 2, ease: "sine.inOut" }, 22.9);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
